@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hello world</title>
+  <!-- axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <!-- <h1>hello world</h1> -->
+
+  <!-- 引入config.js -->
+  <script type="module">
+    import config from './js/config.js';
+
+    // 使用config示例
+    console.log('配置加载成功:', config);
+
+    // 可以在这里使用config中的方法和属性
+    // 例如：发起登录请求
+    async function login() {
+      try {
+        const loginData = config.login();
+        const response = await axios.post(config.baseUrl, loginData);
+        console.log('登录响应:', response.data);
+      } catch (error) {
+        console.error('登录失败:', error);
+      }
+    }
+
+    // 页面加载完成后可以调用
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('页面已加载，config可用');
+    });
+  </script>
+</body>
+
+</html>

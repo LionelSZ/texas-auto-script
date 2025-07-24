@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "name": "my-project",
+  "name": "texas-poker-cli",
   "version": "1.0.0",
-  "description": "项目描述",
+  "description": "Texas Poker CLI - 一个用于自动化德州扑克游戏日常任务的命令行工具",
   "main": "index.js",
   "bin": "src/index.js",
   "scripts": {

@@ -107,7 +107,8 @@ SOFTWARE.
 
 ## 目录结构
 
-  texas-poker-cli/
+```
+texas-poker-cli/
 ├── src/                          # 源代码目录
 │   ├── app/                      # 业务逻辑模块
 │   │   ├── handlers/             # 业务处理器
@@ -149,3 +150,4 @@ SOFTWARE.
 ├── .gitignore
 ├── package.json
 └── README.md
+```

@@ -11,41 +11,58 @@ const processor = createBatchProcessor({ delay: 200 });
 export const handleAuth = {
   /**
    * 处理用户注册
+   * @param {number} count - 要注册的账号数量，默认为1
    */
-  async register() {
-    const userData = generateUserData();
+  async register(count = 1) {
+    const registeredAccounts = [];
 
-    console.log(`正在注册账号...${userData.email}-${userData.nickname}`);
+    for (let i = 0; i < count; i++) {
+      const userData = generateUserData();
 
-    try {
-      const res = await api.register(userData.email, userData.nickname);
+      console.log(`正在注册账号 ${i+1}/${count}...${userData.email}-${userData.nickname}`);
 
-      if (!res?.d?.uid) {
-        console.log(`注册失败:${userData.email} 错误信息:${JSON.stringify(res)}`);
-        return { success: false, error: res };
+      try {
+        const res = await api.register(userData.email, userData.nickname);
+
+        if (!res?.d?.uid) {
+          console.log(`注册失败:${userData.email} 错误信息:${JSON.stringify(res)}`);
+          continue;
+        }
+
+        console.log(`注册成功:${userData.email}`);
+
+        const accountData = {
+          uid: res.d.uid,
+          email: userData.email,
+          nickname: userData.nickname,
+          registerTime: new Date().toLocaleString(),
+        };
+
+        registeredAccounts.push(accountData);
+
+      } catch (error) {
+        console.error(`注册异常:${userData.email}`, error.message);
       }
+      
+      // 添加延迟，避免请求过于频繁
+      if (i < count - 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
 
-      console.log(`注册成功:${userData.email}`);
-
-      const accountData = {
-        uid: res.d.uid,
-        email: userData.email,
-        nickname: userData.nickname,
-        registerTime: new Date().toLocaleString(),
-      };
-
+    if (registeredAccounts.length > 0) {
       const fileName = `register-${new Date().toISOString().slice(0, 10)}`;
-      const saveResult = saveDataToJson([accountData], fileName);
-
+      const saveResult = saveDataToJson(registeredAccounts, fileName);
+      
+      console.log(`成功注册 ${registeredAccounts.length}/${count} 个账号`);
+      
       return {
         success: true,
-        data: accountData,
+        data: registeredAccounts,
         saved: saveResult.success
       };
-
-    } catch (error) {
-      console.error(`注册异常:${userData.email}`, error.message);
-      return { success: false, error: error.message };
+    } else {
+      return { success: false, error: '没有成功注册的账号' };
     }
   },
 

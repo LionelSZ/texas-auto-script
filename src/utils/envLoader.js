@@ -42,6 +42,8 @@ export class EnvLoader {
       }
 
       console.log(`✅ 环境变量文件 ${envPath} 加载成功`);
+      // clear console
+      console.clear();
     } catch (error) {
       console.error(`❌ 加载环境变量文件失败: ${error.message}`);
     }

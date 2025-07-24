@@ -26,7 +26,27 @@ export const saveDataToJson = (data, fileName) => {
       : `${fileName}.json`;
     
     const filePath = path.join(OUTPUT_DIR, cleanFileName);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    
+    // 检查文件是否已存在
+    let existingData = [];
+    if (fs.existsSync(filePath)) {
+      try {
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        existingData = JSON.parse(fileContent);
+        if (!Array.isArray(existingData)) {
+          existingData = [];
+        }
+      } catch (readError) {
+        console.error(`读取文件 ${cleanFileName} 失败:`, readError.message);
+      }
+    }
+    
+    // 合并现有数据和新数据
+    const mergedData = Array.isArray(data) 
+      ? [...existingData, ...data]
+      : existingData;
+    
+    fs.writeFileSync(filePath, JSON.stringify(mergedData, null, 2));
     
     return { success: true, filePath };
   } catch (error) {

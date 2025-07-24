@@ -11,8 +11,8 @@ export const MENU_FUNCTIONS = [
     en: 'Batch Registration',
     command: '1',
     description: {
-      zh: '批量注册新的游戏账号',
-      en: 'Register new game accounts in batch'
+      zh: '批量注册新的游戏账号，可自定义数量',
+      en: 'Register new game accounts in batch with custom quantity'
     }
   },
   {

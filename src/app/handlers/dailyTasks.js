@@ -28,7 +28,7 @@ export const handleDailyTasks = {
    * 福袋任务
    */
   async benefit(accounts) {
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 6; i++) {
       console.log(`正在第${i + 1}次福袋领取`);
       await processor.processBatch(
         accounts,

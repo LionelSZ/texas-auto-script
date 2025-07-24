@@ -62,7 +62,10 @@ export class TexasPokerCLI {
     }
 
     const actionMap = {
-      '1': () => handleAuth.register(),
+      '1': async () => {
+        const count = await this.askRegistrationCount();
+        return handleAuth.register(count);
+      },
       '2': () => handleAuth.login(),
       '3': () => handleDailyTasks.checkIn(accounts),
       '4': () => handleDailyTasks.benefit(accounts),
@@ -88,6 +91,29 @@ export class TexasPokerCLI {
       console.log(chalk.red('❌ 无效输入，请输入 0 - 7 的数字'));
       await this.showMainMenu();
     }
+  }
+
+  /**
+   * 询问注册数量
+   */
+  async askRegistrationCount() {
+    const rl = createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    return new Promise((resolve) => {
+      rl.question(chalk.cyan('👉 请输入要注册的账号数量: '), (answer) => {
+        rl.close();
+        const count = parseInt(answer.trim());
+        if (isNaN(count) || count <= 0) {
+          console.log(chalk.yellow('⚠️ 输入无效，将默认注册1个账号'));
+          resolve(1);
+        } else {
+          resolve(count);
+        }
+      });
+    });
   }
 
   /**

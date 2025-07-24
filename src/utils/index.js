@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import figlet from 'figlet';
 // import { pastel } from 'gradient-string';
 import gradient from 'gradient-string';
-import { functions } from '../config/common.js';
+import { functions } from '../config/LanguageConfig.js';
 
 //随机生成邮箱
 const randomEmail = () => {
@@ -41,9 +41,9 @@ const saveDataToJson = (data, fileName) => {
 
 // 显示主菜单
 function showMenu() {
-  console.log(chalk.greenBright('======================================='));
+  const line_str = chalk.greenBright('------------------------------------------------------');
   console.log(chalk.yellowBright('🌟 欢迎使用「Texas Poker」v1.0 🌟'));
-  console.log(chalk.greenBright('---------------------------------------'));
+  console.log(line_str);
   // console.log('📅 当前时间：' + chalk.cyan(new Date().toLocaleString()));
   console.log('🛠 功能列表：');
   // 将功能列表分成两列显示
@@ -54,20 +54,19 @@ function showMenu() {
     const leftItem = entries[i];
     const rightItem = entries[i + halfLength];
 
-    let line = chalk.blue(`   [${leftItem[0]}] ${leftItem[1].zh}`);
+    let line = chalk.green(`   [${leftItem[0]}] ${leftItem[1].zh}`);
 
     // 如果右侧有项目，添加到同一行
     if (rightItem) {
       // 
       line += ' '.repeat(10 - leftItem[1].zh.length);
-      line += chalk.blue(`   [${rightItem[0]}] ${rightItem[1].zh}`);
+      line += chalk.green(`   [${rightItem[0]}] ${rightItem[1].zh}`);
     }
     console.log(line);
   }
 
-  console.log(chalk.greenBright('---------------------------------------'));
   console.log(chalk.magenta('📌 请输入操作编号并回车开始：'));
-  console.log(chalk.greenBright('======================================='));
+  console.log(line_str);
 }
 
 
@@ -110,13 +109,19 @@ const getAccountsFromJson = () => {
 
 
 const showStatLog = (totalAccounts, successCount, failCount) => {
-  console.log(chalk.blue(`\n============ 登录统计信息 ============`));
-  console.log(chalk.yellow(`📊 总账号数: ${totalAccounts}`));
-  console.log(chalk.green(`✅ 成功个数: ${successCount.length}`));
-  console.log(chalk.red(`❌ 失败个数: ${failCount.length}`));
-  console.log(chalk.blue(`======================================`));
+  // console.log(chalk.blue(`\n============ 登录统计信息 ============`));
+  // console.log(chalk.yellow(`📊 总账号数: ${totalAccounts}`));
+  // console.log(chalk.green(`✅ 成功个数: ${successCount.length}`));
+  // console.log(chalk.red(`❌ 失败个数: ${failCount.length}`));
+  // console.log(chalk.blue(`======================================`));
+  console.log(chalk.green(`成功: ${successCount.length}`));
+  console.log(chalk.red(`失败: ${failCount.length}`));
 }
 
+const showLineLog = (text) => {
+  const line_str = '=========================================='
+  return console.log(chalk.green(`\n${line_str}${text}${line_str}\n`));
+}
 export {
   randomEmail,
   randomNickname,
@@ -124,5 +129,6 @@ export {
   showMenu,
   showLogo,
   getAccountsFromJson,
-  showStatLog
+  showStatLog,
+  showLineLog
 };

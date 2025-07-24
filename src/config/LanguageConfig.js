@@ -23,6 +23,10 @@ const functions = {
     zh: '领取低保',
     en: 'Lucky Bag'
   },
+  '7': {
+    zh: '(签到+福袋+低保)',
+    en: 'Check-in + Lucky Bag + Glpz'
+  },
   '0': {
     zh: '退出程序',
     en: 'Exit'

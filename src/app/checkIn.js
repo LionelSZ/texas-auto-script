@@ -1,7 +1,8 @@
 
 import { api } from '../utils/request.js';
 import { getAccountsFromJson, showStatLog } from '../utils/index.js';
-const handleCheckIn = async () => {
+
+const checkIn = async (uid) => {
   const accounts = getAccountsFromJson();
   const totalAccounts = accounts.length;
   let successCount = [];
@@ -36,5 +37,11 @@ const handleCheckIn = async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
   }
   showStatLog(totalAccounts, successCount, failCount)
+}
+const handleCheckIn = async () => {
+  for (let i = 0; i < 2; i++) {
+    console.log(`正在第${i + 1}次签到`);
+    await checkIn();
+  }
 };
 export { handleCheckIn };

@@ -38,7 +38,7 @@ const handleRegister = async () => {
   // }
   const successList = []
   if (!res?.d?.uid) {
-    console.log(`注册失败:${randomEmail()}/${JSON.stringify(res)}`);
+    console.log(`注册失败:${randomEmail()} 错误信息:${JSON.stringify(res)}`);
     // 切换ip地址
     // console.log('检测到注册失败，正在尝试切换IP地址...');
     // try {

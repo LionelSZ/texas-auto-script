@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import chalk from 'chalk';
+// import chalk from 'chalk';
+import chalk from './chalk-simple.js';
 import figlet from 'figlet';
-// import { pastel } from 'gradient-string';
 import gradient from 'gradient-string';
 import { functions } from '../config/LanguageConfig.js';
 
@@ -41,8 +41,8 @@ const saveDataToJson = (data, fileName) => {
 
 // 显示主菜单
 function showMenu() {
-  const line_str = chalk.greenBright('------------------------------------------------------');
-  console.log(chalk.yellowBright('🌟 欢迎使用「Texas Poker」v1.0 🌟'));
+  const line_str = chalk.green('------------------------------------------------------');
+  console.log(chalk.yellow('🌟 欢迎使用「Texas Poker」v1.0 🌟'));
   console.log(line_str);
   // console.log('📅 当前时间：' + chalk.cyan(new Date().toLocaleString()));
   console.log('🛠 功能列表：');

@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 
-import chalk from 'chalk';
+// import chalk from 'chalk';
 import { createInterface } from 'readline';
 import { showMenu, showLogo, showLineLog, showAboutInfo } from './utils/index.js';
 import { handleLogin, handleRegister, handleBenefit, handleCheckIn, handleGlpz } from './app/index.js';
+import chalk from './utils/chalk-simple.js';
+
+
+
+
 
 // 创建一个函数用于让用户选择继续或退出
 function askContinueOrExit() {
@@ -94,6 +99,13 @@ async function startCLI() {
     }
   });
 }
+
+process.on('uncaughtException', (err) => {
+  console.error('未捕获的异常：', err);
+});
+process.on('unhandledRejection', (err) => {
+  console.error('未处理的 Promise 拒绝：', err);
+});
 
 startCLI();
 

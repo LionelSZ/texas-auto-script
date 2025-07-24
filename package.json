@@ -4,11 +4,21 @@
   "version": "1.0.0",
   "description": "项目描述",
   "main": "index.js",
-  "bin": "./src/index.js",
+  "bin": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/index.js",
     "dev": "node ./src/index.js"
+  },
+  "pkg": {
+    "assets": [
+      "src/utils/**/*",
+      "src/app/**/*"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "dist"
   },
   "dependencies": {
     "axios": "^1.6.2",

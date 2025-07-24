@@ -18,5 +18,15 @@ selenium-debug.log
 *.sln
 *.local
 
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Data and logs
+data/
+logs/
+backups/
+
 package-lock.json
 yarn.lock

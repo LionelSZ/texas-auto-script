@@ -104,3 +104,48 @@ SOFTWARE.
 ## 免责声明
 
 本工具仅供学习和研究使用，请勿用于任何违反相关服务条款的活动。使用本工具产生的任何后果由用户自行承担。
+
+## 目录结构
+
+texas-poker-cli/
+├── src/ # 源代码目录
+│ ├── app/ # 业务逻辑模块
+│ │ ├── handlers/ # 业务处理器
+│ │ │ ├── auth.js # 认证相关（登录、注册）
+│ │ │ ├── dailyTasks.js # 日常任务（签到、福袋、低保）
+│ │ │ └── index.js
+│ │ └── index.js
+│ ├── config/ # 配置文件
+│ │ ├── apiConfig.js
+│ │ ├── appConfig.js
+│ │ └── languageConfig.js
+│ ├── core/ # 核心功能
+│ │ ├── cli.js # CLI 主程序
+│ │ └── batchProcessor.js # 批处理核心
+│ ├── utils/ # 工具函数
+│ │ ├── dataGenerator.js
+│ │ ├── fileManager.js
+│ │ ├── logger.js
+│ │ ├── request.js
+│ │ ├── uiDisplay.js
+│ │ └── index.js
+│ ├── types/ # 类型定义（如果使用 TypeScript）
+│ └── index.js # 程序入口
+├── tests/ # 测试文件
+│ ├── unit/
+│ ├── integration/
+│ └── fixtures/
+├── docs/ # 文档
+│ ├── api.md
+│ ├── configuration.md
+│ └── development.md
+├── dist/ # 构建输出
+├── logs/ # 日志文件
+├── data/ # 数据文件（原 outJson）
+│ ├── accounts/
+│ └── exports/
+├── scripts/ # 构建和部署脚本
+├── .env.example # 环境变量示例
+├── .gitignore
+├── package.json
+└── README.md

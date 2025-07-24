@@ -57,8 +57,10 @@ const handleRegister = async () => {
       registerTime: new Date().toLocaleString(),
     })
   }
-  const fileName = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}.json`;
-  saveDataToJson(successList, fileName);
+  if (successList.length > 0) {
+    const fileName = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}.json`;
+    saveDataToJson(successList, fileName);
+  }
 }
 export { handleRegister };
 

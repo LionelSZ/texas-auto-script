@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import figlet from 'figlet';
-import { pastel } from 'gradient-string';
+// import { pastel } from 'gradient-string';
+import gradient from 'gradient-string';
 import { functions } from '../config/common.js';
 
 //随机生成邮箱
@@ -84,7 +85,7 @@ function showLogo() {
         resolve('');
         return;
       }
-      resolve(pastel.multiline(data));
+      resolve(gradient.pastel.multiline(data));
     });
   });
 }
@@ -111,8 +112,8 @@ const getAccountsFromJson = () => {
 const showStatLog = (totalAccounts, successCount, failCount) => {
   console.log(chalk.blue(`\n============ 登录统计信息 ============`));
   console.log(chalk.yellow(`📊 总账号数: ${totalAccounts}`));
-  console.log(chalk.green(`✅ 成功登录: ${successCount.length}`));
-  console.log(chalk.red(`❌ 登录失败: ${failCount.length}`));
+  console.log(chalk.green(`✅ 成功个数: ${successCount.length}`));
+  console.log(chalk.red(`❌ 失败个数: ${failCount.length}`));
   console.log(chalk.blue(`======================================`));
 }
 

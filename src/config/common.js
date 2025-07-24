@@ -19,6 +19,10 @@ const functions = {
     zh: '领取福袋',
     en: 'Lucky Bag'
   },
+  '6': {
+    zh: '领取低保',
+    en: 'Lucky Bag'
+  },
   '0': {
     zh: '退出程序',
     en: 'Exit'

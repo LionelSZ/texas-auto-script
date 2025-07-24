@@ -64,6 +64,12 @@ const api = {
     return request({
       data: { j: JSON.stringify(config.benefit(uid)) }
     });
+  },
+  // 低保
+  glpz: (uid) => {
+    return request({
+      data: { j: JSON.stringify(config.glpz(uid)) }
+    });
   }
 };
 

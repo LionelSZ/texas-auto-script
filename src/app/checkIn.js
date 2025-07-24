@@ -1,32 +1,40 @@
+
 import { api } from '../utils/request.js';
+import { getAccountsFromJson, showStatLog } from '../utils/index.js';
+const handleCheckIn = async () => {
+  const accounts = getAccountsFromJson();
+  const totalAccounts = accounts.length;
+  let successCount = [];
+  let failCount = [];
 
-/**
- * 处理签到功能
- * @param {string} uid 用户ID
- * @returns {Promise<Object>} 签到结果
- */
-const handleCheckIn = async (uid) => {
-  try {
-    if (!uid) {
-      console.error('签到失败：用户ID不能为空');
-      return { success: false, message: '用户ID不能为空' };
+  console.log(`总共读取到 ${totalAccounts} 个账号，开始处理签到`);
+
+  for (let i = 0; i < totalAccounts; i++) {
+    let account = ''
+    try {
+      account = accounts[i];
+      if (account?.uid) {
+        // 然后调用福袋接口
+        const dataRes = await api.checkIn(account.uid);
+
+        if (dataRes?.e !== 10002) {
+          console.log(`✅ 签到成功！用户: ${account.email}`);
+          successCount.push(account.email);
+        } else {
+          console.log(`❌ 签到失败：${account.email}, 错误信息: ${JSON.stringify(dataRes)}`);
+          failCount.push(account.email);
+        }
+      } else {
+        console.log(`❌ 签到失败：${account.email}`);
+        failCount.push(account.email);
+      }
+    } catch (error) {
+      console.error(`❌ 处理异常：${accounts[i].email}`, error);
+      failCount.push(account.email);
     }
-
-    console.log(`正在为用户 ${uid} 执行签到操作...`);
-    const response = await api.checkIn(uid);
-
-    if (response && response.r === 0) {
-      console.log(`✅ 签到成功！用户: ${uid}`);
-      return { success: true, data: response.d, message: '签到成功' };
-    } else {
-      const errorMsg = response?.m || '未知错误';
-      console.error(`❌ 签到失败：${errorMsg}`);
-      return { success: false, message: errorMsg };
-    }
-  } catch (error) {
-    console.error(`❌ 签到过程中发生错误：${error.message}`);
-    return { success: false, message: error.message };
+    // 添加短暂延迟，避免请求过于频繁
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
+  showStatLog(totalAccounts, successCount, failCount)
 };
-
 export { handleCheckIn };

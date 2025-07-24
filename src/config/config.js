@@ -25,11 +25,15 @@ const config = {
   },
   // 签到
   checkIn: (uid) => {
+    return { "d": { "clag": "CN", "cver": "20160306", "uid": uid }, "i": "user_gmby", "k": "", "s": "" }
+  },
+  // 低保
+  glpz: (uid) => {
     return { "d": { "clag": "CN", "cver": "20160306", "uid": uid }, "i": "user_glpz", "k": "", "s": "" }
   },
   // 福袋
   benefit: (uid) => {
-    return { "d": { "clag": "CN", "cver": "20160306", "uid": uid }, "i": "user_ggpz", "k": "", "s": "" }
+    return { "d": { "clag": "CN", "cver": "20160306", "uid": uid, "count": 2 }, "i": "user_ggpz", "k": "", "s": "" }
   },
 };
 export { config };

@@ -1,13 +1,13 @@
 
 import { api } from '../utils/request.js';
 import { getAccountsFromJson, showStatLog } from '../utils/index.js';
-const handleGlpz = async () => {
-  const accounts = getAccountsFromJson();
+const glpz = async (accounts) => {
+  // const accounts = getAccountsFromJson();
   const totalAccounts = accounts.length;
   let successCount = [];
   let failCount = [];
 
-  console.log(`总共读取到 ${totalAccounts} 个账号，开始处理低保领取`);
+  // console.log(`总共读取到 ${totalAccounts} 个账号，开始处理低保领取`);
 
   for (let i = 0; i < totalAccounts; i++) {
     let account = ''
@@ -36,4 +36,11 @@ const handleGlpz = async () => {
   }
   showStatLog(totalAccounts, successCount, failCount)
 };
+
+const handleGlpz = async (accounts) => {
+  for (let i = 0; i < 2; i++) {
+    console.log(`正在第${i + 1}次低保领取`);
+    await glpz(accounts)
+  }
+}
 export { handleGlpz };

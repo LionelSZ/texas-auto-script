@@ -1,13 +1,13 @@
 
 import { api } from '../utils/request.js';
 import { getAccountsFromJson, showStatLog } from '../utils/index.js';
-const handleBenefit = async () => {
-  const accounts = getAccountsFromJson();
+const benefit = async (accounts) => {
+  // const accounts = getAccountsFromJson();
   const totalAccounts = accounts.length;
   let successCount = [];
   let failCount = [];
 
-  console.log(`总共读取到 ${totalAccounts} 个账号，开始处理福袋领取`);
+  // console.log(`总共读取到 ${totalAccounts} 个账号，开始处理福袋领取`);
 
   for (let i = 0; i < totalAccounts; i++) {
     let account = ''
@@ -36,4 +36,9 @@ const handleBenefit = async () => {
   }
   showStatLog(totalAccounts, successCount, failCount)
 };
+const handleBenefit = async (accounts) => {
+  for (let i = 0; i < 6; i++) {
+    await benefit(accounts)
+  }
+}
 export { handleBenefit };

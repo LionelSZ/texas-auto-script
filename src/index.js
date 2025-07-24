@@ -2,7 +2,7 @@
 
 // import chalk from 'chalk';
 import { createInterface } from 'readline';
-import { showMenu, showLogo, showLineLog, showAboutInfo } from './utils/index.js';
+import { showMenu, showLogo, showLineLog, showAboutInfo, getAccountsFromJson } from './utils/index.js';
 import { handleLogin, handleRegister, handleBenefit, handleCheckIn, handleGlpz } from './app/index.js';
 import chalk from './utils/chalk-simple.js';
 
@@ -39,19 +39,22 @@ async function startCLI() {
   rl.question(chalk.cyan('👉 操作编号：'), async (answer) => {
     rl.close();
     const outText = answer.trim();
+    const accounts = getAccountsFromJson();
+    const totalAccounts = accounts.length;
+    console.log(`总共读取到 ${totalAccounts} 个账号`);
     const funcMaps = {
       '1': handleRegister,
       '2': handleLogin,
-      '3': handleCheckIn,
-      '4': handleBenefit,
-      '5': handleGlpz,
+      '3': () => handleCheckIn(accounts),
+      '4': () => handleBenefit(accounts),
+      '5': () => handleGlpz(accounts),
       '6': async () => {
         showLineLog('开始签到');
-        await handleCheckIn();
+        await handleCheckIn(accounts);
         showLineLog('领取福袋');
-        await handleBenefit();
+        await handleBenefit(accounts);
         showLineLog('领取低保');
-        await handleGlpz();
+        await handleGlpz(accounts);
       },
       '7': () => {
         showAboutInfo();

@@ -2,13 +2,13 @@
 import { api } from '../utils/request.js';
 import { getAccountsFromJson, showStatLog } from '../utils/index.js';
 
-const checkIn = async (uid) => {
-  const accounts = getAccountsFromJson();
+const checkIn = async (accounts) => {
+  // const accounts = getAccountsFromJson();
   const totalAccounts = accounts.length;
   let successCount = [];
   let failCount = [];
 
-  console.log(`总共读取到 ${totalAccounts} 个账号，开始处理签到`);
+  // console.log(`总共读取到 ${totalAccounts} 个账号，开始处理签到`);
 
   for (let i = 0; i < totalAccounts; i++) {
     let account = ''
@@ -38,10 +38,10 @@ const checkIn = async (uid) => {
   }
   showStatLog(totalAccounts, successCount, failCount)
 }
-const handleCheckIn = async () => {
+const handleCheckIn = async (accounts) => {
   for (let i = 0; i < 2; i++) {
     console.log(`正在第${i + 1}次签到`);
-    await checkIn();
+    await checkIn(accounts);
   }
 };
 export { handleCheckIn };

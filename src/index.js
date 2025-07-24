@@ -2,7 +2,7 @@
 
 import chalk from 'chalk';
 import { createInterface } from 'readline';
-import { showMenu, showLogo, showLineLog } from './utils/index.js';
+import { showMenu, showLogo, showLineLog, showAboutInfo } from './utils/index.js';
 import { handleLogin, handleRegister, handleBenefit, handleCheckIn, handleGlpz } from './app/index.js';
 
 // 创建一个函数用于让用户选择继续或退出
@@ -36,19 +36,20 @@ async function startCLI() {
     const outText = answer.trim();
     const funcMaps = {
       '1': handleRegister,
-      '2': handleRegister,
-      '3': handleLogin,
-      '4': handleCheckIn,
-      '5': handleBenefit,
-      '6': handleGlpz,
-      '7': async () => {
-
+      '2': handleLogin,
+      '3': handleCheckIn,
+      '4': handleBenefit,
+      '5': handleGlpz,
+      '6': async () => {
         showLineLog('开始签到');
         await handleCheckIn();
         showLineLog('领取福袋');
         await handleBenefit();
         showLineLog('领取低保');
         await handleGlpz();
+      },
+      '7': () => {
+        showAboutInfo();
       },
       '0': () => {
         console.log(chalk.red('👋 程序退出，再见！'));

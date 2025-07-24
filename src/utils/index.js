@@ -47,20 +47,15 @@ function showMenu() {
   // console.log('📅 当前时间：' + chalk.cyan(new Date().toLocaleString()));
   console.log('🛠 功能列表：');
   // 将功能列表分成两列显示
-  const entries = Object.entries(functions);
-  const halfLength = Math.ceil(entries.length / 2);
-
-  for (let i = 0; i < halfLength; i++) {
-    const leftItem = entries[i];
-    const rightItem = entries[i + halfLength];
-
-    let line = chalk.green(`   [${leftItem[0]}] ${leftItem[1].zh}`);
-
+  // 将功能项两两展示
+  for (let i = 0; i < functions.length; i += 2) {
+    const leftItem = functions[i];
+    const rightItem = functions[i + 1];
+    let line = chalk.green(`   [${leftItem.command}] ${leftItem.zh}`);
     // 如果右侧有项目，添加到同一行
     if (rightItem) {
-      // 
-      line += ' '.repeat(10 - leftItem[1].zh.length);
-      line += chalk.green(`   [${rightItem[0]}] ${rightItem[1].zh}`);
+      line += ' '.repeat(10 - leftItem.zh.length);
+      line += chalk.green(`   [${rightItem.command}] ${rightItem.zh}`);
     }
     console.log(line);
   }
@@ -122,6 +117,18 @@ const showLineLog = (text) => {
   const line_str = '=========================================='
   return console.log(chalk.green(`\n${line_str}${text}${line_str}\n`));
 }
+
+const showAboutInfo = () => {
+  console.log(chalk.cyan(`
+    ┌───────────────────────────────────────────────────────────────┐
+    │ Author: Lionelsz                                              │
+    │ 📧 Email: gsuzher@gmail.com                                   │
+    │ 🔗 GitHub: https://github.com/LionelSZ                        │
+    │ 🔗 Project: https://github.com/LionelSZ/texas-auto-script     │
+    └───────────────────────────────────────────────────────────────┘
+    `));
+
+}
 export {
   randomEmail,
   randomNickname,
@@ -130,5 +137,6 @@ export {
   showLogo,
   getAccountsFromJson,
   showStatLog,
-  showLineLog
+  showLineLog,
+  showAboutInfo
 };

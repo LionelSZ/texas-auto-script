@@ -1,0 +1,127 @@
+import fs from 'fs';
+import path from 'path';
+import chalk from 'chalk';
+import figlet from 'figlet';
+import { pastel } from 'gradient-string';
+import { functions } from '../config/common.js';
+
+//随机生成邮箱
+const randomEmail = () => {
+  const mails = ['gmail.com', 'outlook.com', 'yahoo.com', 'hotmail.com', 'aol.com', 'icloud.com', 'zoho.com', 'yandex.com', 'protonmail.com', 'fastmail.com'];
+  return `${Math.random().toString(36).substring(2, 8)}@${mails[Math.floor(Math.random() * mails.length)]}`;
+}
+// 随机英文昵称
+const randomNickname = () => {
+  const firstNames = ['John', 'Emma', 'Michael', 'Sophia', 'William', 'Olivia', 'James', 'Ava', 'Alexander', 'Isabella', 'Daniel', 'Charlotte', 'Matthew', 'Amelia', 'David', 'Harper', 'Joseph', 'Evelyn', 'Andrew', 'Abigail', 'Joshua', 'Emily', 'Christopher', 'Elizabeth', 'Nicholas', 'Mia', 'Ethan', 'Ella', 'Ryan', 'Grace'];
+  const lastNames = ['Smith', 'Johnson', 'Brown', 'Davis', 'Wilson', 'Miller', 'Taylor', 'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia', 'Martinez', 'Robinson', 'Clark', 'Rodriguez', 'Lewis', 'Lee', 'Walker', 'Hall', 'Allen', 'Young', 'Hernandez', 'King', 'Wright', 'Lopez', 'Hill'];
+
+  const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+  const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+
+  return `${firstName}${lastName}${Math.floor(Math.random() * 1000)}`;
+}
+
+// 把数据保存到./outJson/文件
+const saveDataToJson = (data, fileName) => {
+  // 确保目录存在
+  const dir = './outJson';
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  // 避免重复的.json后缀
+  const cleanFileName = fileName.endsWith('.json')
+    ? fileName
+    : `${fileName}.json`;
+
+  fs.writeFileSync(path.join(dir, cleanFileName), JSON.stringify(data, null, 2));
+}
+
+
+// 显示主菜单
+function showMenu() {
+  console.log(chalk.greenBright('======================================='));
+  console.log(chalk.yellowBright('🌟 欢迎使用「Texas Poker」v1.0 🌟'));
+  console.log(chalk.greenBright('---------------------------------------'));
+  // console.log('📅 当前时间：' + chalk.cyan(new Date().toLocaleString()));
+  console.log('🛠 功能列表：');
+  // 将功能列表分成两列显示
+  const entries = Object.entries(functions);
+  const halfLength = Math.ceil(entries.length / 2);
+
+  for (let i = 0; i < halfLength; i++) {
+    const leftItem = entries[i];
+    const rightItem = entries[i + halfLength];
+
+    let line = chalk.blue(`   [${leftItem[0]}] ${leftItem[1].zh}`);
+
+    // 如果右侧有项目，添加到同一行
+    if (rightItem) {
+      // 
+      line += ' '.repeat(10 - leftItem[1].zh.length);
+      line += chalk.blue(`   [${rightItem[0]}] ${rightItem[1].zh}`);
+    }
+    console.log(line);
+  }
+
+  console.log(chalk.greenBright('---------------------------------------'));
+  console.log(chalk.magenta('📌 请输入操作编号并回车开始：'));
+  console.log(chalk.greenBright('======================================='));
+}
+
+
+// 显示 ASCII LOGO
+function showLogo() {
+  return new Promise((resolve) => {
+    figlet.text('Texas Poker', {
+      font: 'Standard',
+      horizontalLayout: 'default',
+      verticalLayout: 'default',
+      whitespaceBreak: true,
+    }, (err, data) => {
+      if (err) {
+        console.log('❌ Logo 生成失败');
+        resolve('');
+        return;
+      }
+      resolve(pastel.multiline(data));
+    });
+  });
+}
+
+
+/**
+ * 从outJson目录读取所有账号数据
+ * @returns {Array} 包含所有账号数据的数组
+ */
+const getAccountsFromJson = () => {
+  const files = fs.readdirSync('./outJson');
+  const allAccounts = [];
+
+  for (const file of files) {
+    const data = JSON.parse(fs.readFileSync(`./outJson/${file}`, 'utf8'));
+    console.log(`读取文件: ${file}, 包含 ${data.length} 个账号`);
+    allAccounts.push(...data);
+  }
+
+  return allAccounts;
+};
+
+
+const showStatLog = (totalAccounts, successCount, failCount) => {
+  console.log(chalk.blue(`\n============ 登录统计信息 ============`));
+  console.log(chalk.yellow(`📊 总账号数: ${totalAccounts}`));
+  console.log(chalk.green(`✅ 成功登录: ${successCount.length}`));
+  console.log(chalk.red(`❌ 登录失败: ${failCount.length}`));
+  console.log(chalk.blue(`======================================`));
+}
+
+export {
+  randomEmail,
+  randomNickname,
+  saveDataToJson,
+  showMenu,
+  showLogo,
+  getAccountsFromJson,
+  showStatLog
+};

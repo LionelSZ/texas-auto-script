@@ -100,6 +100,77 @@ export class BatchProcessor {
   }
 
   /**
+   * 专门用于登录的批量处理方法，支持登录成功后更新游戏统计信息
+   * @param {Array} accounts - 账号数组
+   * @param {Function} processor - 处理单个账号的函数
+   * @param {Function} successChecker - 检查响应是否成功的函数
+   * @param {Function} updateCallback - 登录成功后的更新回调函数
+   * @param {string} operationName - 操作名称（用于日志）
+   * @returns {Object} 处理结果统计
+   */
+  async processBatchWithUpdate(accounts, processor, successChecker, updateCallback, operationName = '登录') {
+    const totalAccounts = accounts.length;
+    const successCount = [];
+    const failCount = [];
+
+    for (let i = 0; i < totalAccounts; i++) {
+      const account = accounts[i];
+
+      try {
+        if (!account?.uid) {
+          this._logError(operationName, account.email, '缺少UID');
+          failCount.push(account.email);
+          continue;
+        }
+
+        const result = await this._processWithRetry(
+          processor,
+          account,
+          successChecker,
+          operationName
+        );
+
+        if (result.success) {
+          this._logSuccess(operationName, account.email);
+          successCount.push(account.email);
+
+          // 如果提供了更新回调函数，则在登录成功后调用
+          if (updateCallback && typeof updateCallback === 'function') {
+            try {
+              await updateCallback(account, result.response);
+            } catch (updateError) {
+              console.error(`❌ 更新账号 ${account.email} 的游戏统计信息失败:`, updateError.message);
+            }
+          }
+        } else {
+          this._logError(operationName, account.email, result.error);
+          failCount.push(account.email);
+        }
+
+      } catch (error) {
+        this._logException(operationName, account.email, error);
+        failCount.push(account.email);
+      }
+
+      // 添加延迟，避免请求过于频繁
+      if (i < totalAccounts - 1) {
+        await this._delay();
+      }
+    }
+
+    if (this.showLogs) {
+      showStatLog(totalAccounts, successCount, failCount);
+    }
+
+    return {
+      total: totalAccounts,
+      success: successCount,
+      fail: failCount,
+      successRate: ((successCount.length / totalAccounts) * 100).toFixed(2)
+    };
+  }
+
+  /**
    * 延迟函数
    */
   async _delay(ms = this.delay) {

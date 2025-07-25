@@ -3,12 +3,18 @@
     "uid": "7167630881967116",
     "email": "lionel@gmail.com",
     "nickname": "lionel",
-    "registerTime": "2025/7/24 11:54:24"
+    "registerTime": "2025/7/24 11:54:24",
+    "gameCount": 72,
+    "gameBalance": 77413,
+    "lastUpdateTime": "2025/7/25 17:46:37"
   },
   {
     "uid": "7167630881971724",
     "email": "lionelss@gmail.com",
     "nickname": "lionels",
-    "registerTime": "2025/7/24 11:54:24"
+    "registerTime": "2025/7/24 11:54:24",
+    "gameCount": 114,
+    "gameBalance": 18800,
+    "lastUpdateTime": "2025/7/25 17:46:37"
   }
 ]

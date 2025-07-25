@@ -1,5 +1,5 @@
 import { api } from '../../utils/request.js';
-import { generateUserData, saveDataToJson, getAccountsFromJson } from '../../utils/index.js';
+import { generateUserData, saveDataToJson, getAccountsFromJson, updateAccountGameStats } from '../../utils/index.js';
 // import { createBatchProcessor } from '../../core/batchProcessor.js';
 import { createBatchProcessor } from '../../utils/batchProcessor.js';
 
@@ -24,21 +24,24 @@ export const handleAuth = {
       console.log(`正在注册账号 ${i + 1}/${count}...${userData.email}-${userData.nickname}`);
 
       try {
-        const res = await api.register(userData.email, userData.nickname);
+        const response = await api.register(userData.email, userData.nickname);
 
-        if (!res?.d?.uid) {
-          console.log(`注册失败:${userData.email} 错误信息:${JSON.stringify(res)}`);
+        if (!response?.d?.uid) {
+          console.log(`注册失败:${userData.email} 错误信息:${JSON.stringify(response)}`);
           consecutiveErrors++;
         } else {
           console.log(`注册成功:${userData.email}`);
           consecutiveErrors = 0; // 重置连续错误计数
+          const { d = {} } = response
+          const { uid = '-1', ls = '-1', bv = '-1' } = d;
+
 
           const accountData = {
-            uid: res?.d?.uid,
+            uid: uid,
             email: userData.email,
             nickname: userData.nickname,
-            gameCount: res?.d?.ls || '-1',
-            gameBalance: res?.d?.bv || '-1',
+            gameCount: Number(ls),
+            gameBalance: Number(bv),
             registerTime: new Date().toLocaleString(),
           };
 
@@ -95,10 +98,30 @@ export const handleAuth = {
     const accounts = getAccountsFromJson();
     console.log(`总共读取到 ${accounts.length} 个账号`);
 
-    return await processor.processBatch(
+    // 定义登录成功后的更新回调函数
+    const updateGameStatsCallback = async (account, response) => {
+      // 从登录响应中提取游戏统计信息
+      const { d = {} } = response;
+      const { ls = '-1', bv = '-1' } = d
+
+      // 更新JSON文件中的游戏统计信息
+      const updateResult = updateAccountGameStats(
+        account.uid,
+        Number(ls),
+        Number(bv),
+        account.email
+      );
+
+      if (!updateResult.success) {
+        console.error(`❌ 更新账号 ${account.email} 游戏统计信息失败:`, updateResult.error);
+      }
+    };
+
+    return await processor.processBatchWithUpdate(
       accounts,
       (account) => api.login(account.email),
       (response) => response?.d?.uid,
+      updateGameStatsCallback,
       '登录'
     );
   }

@@ -19,7 +19,7 @@ export const handleAuth = {
     for (let i = 0; i < count; i++) {
       const userData = generateUserData();
 
-      console.log(`正在注册账号 ${i+1}/${count}...${userData.email}-${userData.nickname}`);
+      console.log(`正在注册账号 ${i + 1}/${count}...${userData.email}-${userData.nickname}`);
 
       try {
         const res = await api.register(userData.email, userData.nickname);
@@ -32,10 +32,15 @@ export const handleAuth = {
         console.log(`注册成功:${userData.email}`);
 
         const accountData = {
-          uid: res.d.uid,
+          uid: res?.d?.uid,
           email: userData.email,
           nickname: userData.nickname,
+          // 游戏场次
+          gameCount: res?.d?.ls || '-1',
+          // 游戏余额
+          gameBalance: res?.d?.bv || '-1',
           registerTime: new Date().toLocaleString(),
+
         };
 
         registeredAccounts.push(accountData);
@@ -43,7 +48,7 @@ export const handleAuth = {
       } catch (error) {
         console.error(`注册异常:${userData.email}`, error.message);
       }
-      
+
       // 添加延迟，避免请求过于频繁
       if (i < count - 1) {
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -53,9 +58,9 @@ export const handleAuth = {
     if (registeredAccounts.length > 0) {
       const fileName = `register-${new Date().toISOString().slice(0, 10)}`;
       const saveResult = saveDataToJson(registeredAccounts, fileName);
-      
+
       console.log(`成功注册 ${registeredAccounts.length}/${count} 个账号`);
-      
+
       return {
         success: true,
         data: registeredAccounts,

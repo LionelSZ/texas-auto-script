@@ -38,7 +38,7 @@ export class TexasPokerCLI {
    */
   async showMainMenu() {
     showMenu();
-    
+
     this.rl = createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -54,11 +54,13 @@ export class TexasPokerCLI {
    * 处理用户选择
    */
   async handleUserChoice(choice) {
-    const accounts = getAccountsFromJson();
-    const totalAccounts = accounts.length;
-    
-    if (totalAccounts > 0) {
-      console.log(`总共读取到 ${totalAccounts} 个账号`);
+    let accounts = []
+    if (choice != 1 && choice != 7 && choice != 0) {
+      accounts = getAccountsFromJson();
+      const totalAccounts = accounts.lengt
+      if (totalAccounts > 0) {
+        console.log(`总共读取到 ${accounts.lengt} 个账号`);
+      }
     }
 
     const actionMap = {
@@ -76,10 +78,10 @@ export class TexasPokerCLI {
     };
 
     const action = actionMap[choice];
-    
+
     if (action) {
       console.log(`\n`, chalk.green(`🔧 正在开始执行任务...`));
-      
+
       try {
         await action();
         await this.askContinueOrExit();
@@ -128,14 +130,15 @@ export class TexasPokerCLI {
     return new Promise((resolve) => {
       rl.question(chalk.cyan('👉 操作已完成，是否继续使用？(y/n): \n'), (answer) => {
         rl.close();
+        console.clear()
         const shouldContinue = answer.trim().toLowerCase() === 'y';
-        
+
         if (shouldContinue) {
           this.showMainMenu();
         } else {
           this.exit();
         }
-        
+
         resolve(shouldContinue);
       });
     });

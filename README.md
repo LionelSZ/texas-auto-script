@@ -84,7 +84,7 @@ texas-poker-cli/
 2. 克隆仓库
 
 ```bash
-git clone https://github.com/your-username/texas-auto-script.git
+git clone https://github.com/LionelSZ/texas-auto-script.git
 cd texas-auto-script
 ```
 

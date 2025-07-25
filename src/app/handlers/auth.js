@@ -15,6 +15,8 @@ export const handleAuth = {
    */
   async register(count = 1) {
     const registeredAccounts = [];
+    let consecutiveErrors = 0;
+    const maxConsecutiveErrors = 3;
 
     for (let i = 0; i < count; i++) {
       const userData = generateUserData();
@@ -26,32 +28,47 @@ export const handleAuth = {
 
         if (!res?.d?.uid) {
           console.log(`注册失败:${userData.email} 错误信息:${JSON.stringify(res)}`);
-          continue;
+          consecutiveErrors++;
+        } else {
+          console.log(`注册成功:${userData.email}`);
+          consecutiveErrors = 0; // 重置连续错误计数
+
+          const accountData = {
+            uid: res?.d?.uid,
+            email: userData.email,
+            nickname: userData.nickname,
+            gameCount: res?.d?.ls || '-1',
+            gameBalance: res?.d?.bv || '-1',
+            registerTime: new Date().toLocaleString(),
+          };
+
+          registeredAccounts.push(accountData);
         }
 
-        console.log(`注册成功:${userData.email}`);
-
-        const accountData = {
-          uid: res?.d?.uid,
-          email: userData.email,
-          nickname: userData.nickname,
-          // 游戏场次
-          gameCount: res?.d?.ls || '-1',
-          // 游戏余额
-          gameBalance: res?.d?.bv || '-1',
-          registerTime: new Date().toLocaleString(),
-
-        };
-
-        registeredAccounts.push(accountData);
-
       } catch (error) {
-        console.error(`注册异常:${userData.email}`, error.message);
+        consecutiveErrors++;
+
+        if (error.code === 'ECONNRESET') {
+          console.error(`网络连接中断:${userData.email}，等待网络恢复...`);
+          // 网络中断时等待更长时间
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        } else {
+          console.error(`注册异常:${userData.email}`, error.message);
+        }
+
+        // 如果连续错误过多，提示检查网络
+        if (consecutiveErrors >= maxConsecutiveErrors) {
+          console.log(`连续 ${maxConsecutiveErrors} 次错误，建议检查网络连接后继续...`);
+          // await new Promise(resolve => setTimeout(resolve, 2000));
+          consecutiveErrors = 0;
+        }
       }
 
-      // 添加延迟，避免请求过于频繁
+      // 动态调整延迟：网络不稳定时增加延迟
+      // const delay = consecutiveErrors > 0 ? 2000 : 100;
+      const delay = 100;
       if (i < count - 1) {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
 

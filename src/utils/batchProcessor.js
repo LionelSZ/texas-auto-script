@@ -25,7 +25,7 @@ export class BatchProcessor {
 
     for (let i = 0; i < totalAccounts; i++) {
       const account = accounts[i];
-      
+
       try {
         if (!account?.uid) {
           this._logError(operationName, account.email, '缺少UID');
@@ -34,9 +34,9 @@ export class BatchProcessor {
         }
 
         const result = await this._processWithRetry(
-          processor, 
-          account, 
-          successChecker, 
+          processor,
+          account,
+          successChecker,
           operationName
         );
 
@@ -80,7 +80,7 @@ export class BatchProcessor {
     for (let attempt = 1; attempt <= this.retryCount; attempt++) {
       try {
         const response = await processor(account);
-        
+
         if (successChecker(response)) {
           return { success: true, response };
         } else {
@@ -88,10 +88,10 @@ export class BatchProcessor {
         }
       } catch (error) {
         lastError = error.message;
-        
+
         // 如果不是最后一次尝试，等待后重试
         if (attempt < this.retryCount) {
-          await this._delay(200); // 重试前短暂延迟
+          await this._delay(100); // 重试前短暂延迟
         }
       }
     }

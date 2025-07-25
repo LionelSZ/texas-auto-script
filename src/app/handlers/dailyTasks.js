@@ -3,7 +3,7 @@ import { api } from '../../utils/request.js';
 import { createBatchProcessor } from '../../utils/batchProcessor.js';
 import { showLineLog } from '../../utils/uiDisplay.js';
 
-const processor = createBatchProcessor({ delay: 500 });
+const processor = createBatchProcessor({ delay: 10 });
 
 /**
  * 日常任务处理器

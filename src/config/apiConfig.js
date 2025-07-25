@@ -8,7 +8,7 @@ const CONFIG = {
   // 服务器配置
   SERVER: {
     BASE_URL: process.env.TEXAS_API_BASE_URL || 'http://54.152.176.249/texas/index.php',
-    TIMEOUT: parseInt(process.env.TEXAS_API_TIMEOUT) || 30000,
+    TIMEOUT: parseInt(process.env.TEXAS_API_TIMEOUT) || 10000,
     RETRY_COUNT: parseInt(process.env.TEXAS_API_RETRY_COUNT) || 3
   },
 

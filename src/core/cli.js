@@ -55,7 +55,8 @@ export class TexasPokerCLI {
    */
   async handleUserChoice(choice) {
     let accounts = []
-    if (choice != 1 && choice != 7 && choice != 0) {
+    const filterKeys = ['2', '3', '4', '5', '6']
+    if (filterKeys.includes(choice)) {
       accounts = getAccountsFromJson();
       const totalAccounts = accounts.lengt
       if (totalAccounts > 0) {
@@ -90,6 +91,7 @@ export class TexasPokerCLI {
         await this.askContinueOrExit();
       }
     } else {
+      console.clear();
       console.log(chalk.red('❌ 无效输入，请输入 0 - 7 的数字'));
       await this.showMainMenu();
     }

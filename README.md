@@ -1,5 +1,9 @@
 # Texas Poker CLI 工具
 
+## 首页
+
+![欢迎界面](./assets/images/welcome.png)
+
 ## 简介
 
 Texas Poker 是一个命令行界面(CLI)工具，用于自动化管理 Texas Poker 游戏账号相关操作。本工具提供了账号注册、登录验证、每日签到、领取福袋和低保等自动化功能，帮助用户便捷管理多个游戏账号。
